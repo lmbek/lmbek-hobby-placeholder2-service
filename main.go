@@ -1,17 +1,18 @@
 package main
 
 import (
-	"fmt"
+	"log/slog"
 	"net/http"
 )
 
 func main() {
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Authentication Service is Healthy")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Authentication Service is Healthy"))
 	})
 
-	fmt.Println("Authentication Service starting on :8081...")
+	slog.Info("Authentication Service starting", "port", 8081)
 	if err := http.ListenAndServe(":8081", nil); err != nil {
-		fmt.Printf("Error starting service: %v\n", err)
+		slog.Error("Error starting service", "error", err)
 	}
 }
