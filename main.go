@@ -6,6 +6,8 @@ import (
 )
 
 func main() {
+	slog.Info("Something something")
+
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Authentication Service is Healthy"))
