@@ -67,6 +67,12 @@ func main() {
 		fmt.Fprintf(w, `{"user":"%s","email":"%s@example.com"}`, user, user)
 	})
 
+	mux.HandleFunc("GET /api/version", func(w http.ResponseWriter, r *http.Request) {
+		slog.Info("version requested", "remote", r.RemoteAddr)
+		w.Header().Set("Content-Type", "application/json")
+		fmt.Fprint(w, `{"service":"placeholder2-service","version":"0.0.2"}`)
+	})
+
 	mux.HandleFunc("POST /api/register", func(w http.ResponseWriter, r *http.Request) {
 		delay := time.Duration(100+rand.IntN(400)) * time.Millisecond
 		time.Sleep(delay)
