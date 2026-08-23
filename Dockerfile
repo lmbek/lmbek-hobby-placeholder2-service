@@ -1,7 +1,15 @@
-FROM golang:1.26-alpine
+# Build Stage
+FROM golang:1.26-alpine AS builder
 WORKDIR /app
 COPY go.mod .
 COPY main.go .
-RUN go build -o service main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o service main.go
+
+# Minimal Production Stage
+FROM alpine:3.20
+RUN adduser -D -u 10001 appuser
+WORKDIR /app
+COPY --from=builder /app/service .
+USER 10001:10001
 EXPOSE 8081
-CMD ["./service"]
+ENTRYPOINT ["/app/service"]
