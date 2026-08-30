@@ -43,7 +43,7 @@ jobs:
           check-latest: true
 
       - name: Test Go Service
-        run: go test -v ./... || true
+        run: go test -v ./...
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
