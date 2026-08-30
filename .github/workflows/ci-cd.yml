@@ -92,7 +92,10 @@ jobs:
           GH_TOKEN: ${{ secrets.PLATFORM_REPOSITORY_TOKEN }}
           IMAGE_DIGEST: ${{ steps.build.outputs.digest }}
         run: |
-          test -n "$GH_TOKEN" || { echo "PLATFORM_REPOSITORY_TOKEN is required" >&2; exit 1; }
+          if [[ -z "$GH_TOKEN" ]]; then
+            echo "::error title=Missing repository secret::Add PLATFORM_REPOSITORY_TOKEN to this repository's Actions secrets. It needs Contents and Pull requests write access to lmbek/lmbek-hobby-platform."
+            exit 1
+          fi
           curl --fail-with-body --request POST \
             --url https://api.github.com/repos/lmbek/lmbek-hobby-platform/dispatches \
             --header "Authorization: Bearer $GH_TOKEN" \
